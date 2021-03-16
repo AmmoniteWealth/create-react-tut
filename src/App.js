@@ -1,23 +1,60 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import Button from './components/button'
+import Count from './components/count'
 import './App.css';
 
 function App() {
+  const [ count, setCount ] = useState(0)
+  const [ countPlusOne, setCountPlusOne ] = useState(0)
+  const [ currentThing, setCurrentThing ] = useState('')
+  const [ things, setThings ] = useState([])
+
+  const increaseCount = () => {
+    setCount(count + 1)
+  }
+
+  const changeCurrentThing = (item) => {
+    setCurrentThing(item)
+  }
+
+  const addToThings = () => {
+    let _things = things
+    _things.push(currentThing)
+    setThings([..._things]) // if you don't use the spread operator it won't rerender the map
+  }
+
+  useEffect(() => {
+    document.title = `${count}`;
+    setCountPlusOne(count + 1)
+  }, [count]) // without count in the dependencies, the title won't change and setCountPlusOne won't happen
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <h2>{count}</h2>
+      <div>{count % 2 === 0 ? "EVEN" : "ODD"}</div>
+      <Button
+        title="Increase"
+        buttonFunction={increaseCount}
+      />
+      <Button
+        title="Add to Array"
+        buttonFunction={addToThings}
+      />
+      <input
+        type="text"
+        onChange={(event) => {changeCurrentThing(event.target.value)}}
+      ></input>
+      {things.map((value) => {
+        return (
+        <div
+          key={value}
         >
-          Learn React
-        </a>
-      </header>
+          {value}
+        </div>)
+      })}
+      <Count
+        count={countPlusOne}
+      />
     </div>
   );
 }
