@@ -23,9 +23,13 @@ function App() {
     setThings([..._things]) // if you don't use the spread operator it won't rerender the map
   }
 
+  const upOne = () => {
+    setCountPlusOne(count + 1) // set useState function moved out of useEffect
+  }
+
   useEffect(() => {
     document.title = `${count}`;
-    setCountPlusOne(count + 1)
+    upOne()
   }, [count]) // without count in the dependencies, the title won't change and setCountPlusOne won't happen
 
   return (
